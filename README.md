@@ -1,26 +1,66 @@
-#  Как работать с репозиторием финального задания
+[![.github/workflows/main.yml](https://github.com/Randy-Colt/kittygram_final/actions/workflows/main.yml/badge.svg)](https://github.com/Randy-Colt/kittygram_final/actions/workflows/main.yml)
 
-## Что нужно сделать
+## Описание проекта
 
-Настроить запуск проекта Kittygram в контейнерах и CI/CD с помощью GitHub Actions
+**Kittygram** - это сайт, на котором люди могут выставлять фотографии своих котов и их достижения.
 
-## Как проверить работу с помощью автотестов
+## Стек
 
-В корне репозитория создайте файл tests.yml со следующим содержимым:
-```yaml
-repo_owner: ваш_логин_на_гитхабе
-kittygram_domain: полная ссылка (https://доменное_имя) на ваш проект Kittygram
-taski_domain: полная ссылка (https://доменное_имя) на ваш проект Taski
-dockerhub_username: ваш_логин_на_докерхабе
+- Python 3.9
+- Django 3.2.3
+- Django REST framework 3.12.4
+- Node.JS 18
+- Nginx
+- Docker compose
+
+
+## Запуск проекта
+
+Клонируем репозиторий: 
+
+```bash 
+git clone git@github.com:Randy-Colt/kittygram_final.git
 ```
 
-Скопируйте содержимое файла `.github/workflows/main.yml` в файл `kittygram_workflow.yml` в корневой директории проекта.
+Запускаем docker compose:
 
-Для локального запуска тестов создайте виртуальное окружение, установите в него зависимости из backend/requirements.txt и запустите в корневой директории проекта `pytest`.
+```bash
+sudo docker compose up
+```
 
-## Чек-лист для проверки перед отправкой задания
+## После запуска: Миграции, сбор статистики
 
-- Проект Taski доступен по доменному имени, указанному в `tests.yml`.
-- Проект Kittygram доступен по доменному имени, указанному в `tests.yml`.
-- Пуш в ветку main запускает тестирование и деплой Kittygram, а после успешного деплоя вам приходит сообщение в телеграм.
-- В корне проекта есть файл `kittygram_workflow.yml`.
+После запуска нужно выполнить сбор статики и миграцию для бэкенда. Статика фронтенда собирается во время запуска контейнера, после чего он останавливается. 
+
+```bash
+sudo docker compose exec backend python manage.py migrate
+
+sudo docker compose exec backend python manage.py collectstatic
+
+sudo docker compose exec backend cp -r /app/collected_static/. /backend_static/static/
+```
+
+Проект доуступен по адресу:
+
+```
+http://localhost:9000/
+```
+
+## Описание переменных окружения
+
+Ниже пример файла .env c переменными окружения, необходимыми для запуска приложения
+
+```bash
+POSTGRES_DB=kittygram
+POSTGRES_USER=kittygram_user
+POSTGRES_PASSWORD=kittygram_password
+DB_NAME=kittygram
+DB_HOST=db
+DEBUG=False
+SECRET_KEY=django_secret_key_example
+SQLITE=True
+```
+
+## Автор
+
+Логвинов Андрей https://github.com/Randy-Colt
