@@ -11,8 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 
-debug_value = os.getenv('DEBUG')
-DEBUG = debug_value.lower() == 'true' if isinstance(debug_value, str) else False
+DEBUG = os.getenv('DEBUG', 'false') == 'true'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost 127.0.0.1').split()
 
